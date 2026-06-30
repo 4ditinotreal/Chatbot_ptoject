@@ -1,61 +1,87 @@
+import os
 import streamlit as st
+from dotenv import load_dotenv
 import google.generativeai as genai
 
+load_dotenv()
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+if not GEMINI_API_KEY:
+    st.error("Gemini API key not found. Add it to your .env file.")
+    st.stop()
+
+genai.configure(api_key=GEMINI_API_KEY)
+
 st.set_page_config(
-    page_title="My AI Chatbot",
-    page_icon="✨",
-    layout="centered"
+    page_title="AI Assistant",
+    page_icon="🤖",
+    layout="wide"
 )
 
-API_KEY = "AIzaSyD1zCTZTZiGmhnW8_KVckza8Rx6S6UQJAQ"
-
-genai.configure(api_key=API_KEY)
-
-st.title("My First AI Chatbot :rocket:")
-st.write("Welcome! Ask me anything and I'll help you.")
+st.title("🤖 AI Assistant")
+st.caption("Powered by Gemini")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
 for message in st.session_state.messages:
-    if message["role"] == "user":
-        with st.chat_message("user"):
-            st.write(message["content"])
-    else:
-        with st.chat_message("assistant"):
-            st.write(message["content"])
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-def get_ai_response(user_question):
-    try:
-        model = genai.GenerativeModel('gemini-1.5-flash')
-        response = model.generate_content(user_question)
-        return response.text
-    except Exception as e:
-        return "Sorry, I'm having trouble right now. Please try again!"
+def get_ai_response(prompt):
+    model = genai.GenerativeModel("gemini-2.5-flash")
+    response = model.generate_content(prompt)
+    return response.text
 
-user_input = st.chat_input("Type your message here...")
+user_input = st.chat_input("Ask me anything...")
 
 if user_input:
-    st.session_state.messages.append({"role": "user", "content": user_input})
+
+    st.session_state.messages.append(
+        {
+            "role": "user",
+            "content": user_input
+        }
+    )
+
     with st.chat_message("user"):
-        st.write(user_input)
+        st.markdown(user_input)
 
     with st.chat_message("assistant"):
+
         with st.spinner("Thinking..."):
-            ai_response = get_ai_response(user_input)
-            st.write(ai_response)
-    st.session_state.messages.append({"role": "assistant", "content": ai_response})
 
-if st.button("Clear Chat"):
-    st.session_state.messages = []
-    st.rerun()
+            try:
+                reply = get_ai_response(user_input)
+            except Exception as e:
+                reply = f"Error:\n\n{e}"
 
-st.markdown("---")
-st.markdown("""
-### Try asking:
-- Tell me a joke
-- Explain what AI is
-- Help me with math problems
-- Write a short story
-- What's the weather like? (Note: I can't access real-time data)
+            st.markdown(reply)
+
+    st.session_state.messages.append(
+        {
+            "role": "assistant",
+            "content": reply
+        }
+    )
+
+with st.sidebar:
+
+    st.title("Options")
+
+    if st.button("🗑 Clear Chat"):
+        st.session_state.messages = []
+        st.rerun()
+
+    st.markdown("---")
+
+    st.markdown("### Example Questions")
+
+    st.markdown("""
+- Explain AI
+- Python program for Stack
+- HTML Login Page
+- Difference between SQL and MySQL
+- Write a Resume
 """)
