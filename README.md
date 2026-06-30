@@ -64,9 +64,20 @@ GEMINI_API_KEY=YOUR_API_KEY
 streamlit run app.py
 ```
 
-## 📸 Preview
+# 📸 Preview
 
-(Add screenshots here after deploying the project.)
+## Home Page
+
+![Home Page](images/chatbot-chat.png)
+
+## Chat Interface
+
+![Chat Interface](images/chatbot-home.png)
+
+## Sidebar
+
+![Sidebar](images/chatbot-ui.png)
+
 
 ## 📌 Future Improvements
 
