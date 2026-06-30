@@ -14,13 +14,60 @@ if not GEMINI_API_KEY:
 genai.configure(api_key=GEMINI_API_KEY)
 
 st.set_page_config(
-    page_title="AI Assistant",
+    page_title="Nova AI",
     page_icon="🤖",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
+st.markdown("""
+<style>
 
-st.title("🤖 AI Assistant")
-st.caption("Powered by Gemini")
+#MainMenu{
+visibility:hidden;
+}
+
+footer{
+visibility:hidden;
+}
+
+header{
+visibility:hidden;
+}
+
+.block-container{
+padding-top:2rem;
+padding-bottom:2rem;
+padding-left:3rem;
+padding-right:3rem;
+}
+
+.stChatMessage{
+border-radius:15px;
+padding:15px;
+margin-bottom:12px;
+}
+
+.stTextInput>div>div>input{
+border-radius:15px;
+}
+
+.stButton>button{
+border-radius:12px;
+width:100%;
+}
+
+</style>
+""",unsafe_allow_html=True)
+
+st.markdown("""
+<h1 style='text-align:center;color:#4F8BF9;'>
+🤖 Nova AI
+</h1>
+
+<p style='text-align:center;font-size:18px;color:gray;'>
+Your Intelligent AI Assistant
+</p>
+""", unsafe_allow_html=True)
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -68,20 +115,41 @@ if user_input:
 
 with st.sidebar:
 
-    st.title("Options")
+    st.image(
+        "https://cdn-icons-png.flaticon.com/512/4712/4712027.png",
+        width=90
+    )
+
+    st.title("Nova AI")
+
+    st.success("🟢 Online")
+
+    st.markdown("---")
+
+    st.markdown("### Model")
+
+    st.info("Gemini 2.5 Flash")
+
+    st.markdown("---")
 
     if st.button("🗑 Clear Chat"):
-        st.session_state.messages = []
+
+        st.session_state.messages=[]
+
         st.rerun()
 
     st.markdown("---")
 
-    st.markdown("### Example Questions")
+    st.markdown("### Suggestions")
 
     st.markdown("""
-- Explain AI
-- Python program for Stack
-- HTML Login Page
-- Difference between SQL and MySQL
-- Write a Resume
+• Explain AI
+
+• Write Python Code
+
+• HTML Login Page
+
+• Resume Builder
+
+• SQL vs MySQL
 """)
