@@ -13,75 +13,128 @@ if not GEMINI_API_KEY:
 
 genai.configure(api_key=GEMINI_API_KEY)
 
+model = genai.GenerativeModel("gemini-2.5-flash")
+
 st.set_page_config(
     page_title="Aurora AI",
     page_icon="🤖",
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
 st.markdown("""
 <style>
 
-#MainMenu{
-visibility:hidden;
+#MainMenu {
+    visibility: hidden;
 }
 
-footer{
-visibility:hidden;
+footer {
+    visibility: hidden;
 }
 
-header{
-visibility:hidden;
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
 }
 
-.block-container{
-padding-top:2rem;
-padding-bottom:2rem;
-padding-left:3rem;
-padding-right:3rem;
+.stChatMessage {
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
 }
 
-.stChatMessage{
-border-radius:15px;
-padding:15px;
-margin-bottom:12px;
+.stButton > button {
+    width: 100%;
+    border-radius: 12px;
+    height: 45px;
+    font-size:16px;
 }
 
-.stTextInput>div>div>input{
-border-radius:15px;
-}
-
-.stButton>button{
-border-radius:12px;
-width:100%;
+section[data-testid="stSidebar"] {
+    border-right:1px solid rgba(255,255,255,0.1);
 }
 
 </style>
-""",unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 st.markdown("""
-<h1 style='text-align:center;color:#4F8BF9;'>
+<h1 style='text-align:center;color:#4F8BF9;font-size:60px;'>
 🤖 Aurora AI
 </h1>
 
-<p style='text-align:center;font-size:18px;color:gray;'>
+<p style='text-align:center;font-size:22px;color:gray;'>
 Your Intelligent AI Assistant
 </p>
 """, unsafe_allow_html=True)
+
+with st.sidebar:
+
+    st.image(
+        "https://cdn-icons-png.flaticon.com/512/4712/4712027.png",
+        width=100
+    )
+
+    st.title("Aurora AI")
+
+    st.success("🟢 Online")
+
+    st.markdown("---")
+
+    st.subheader("Model")
+
+    st.info("Gemini 2.5 Flash")
+
+    st.markdown("---")
+
+    if st.button("🗑 Clear Chat"):
+        st.session_state.messages = []
+        st.rerun()
+
+    st.markdown("---")
+
+    st.subheader("Example Questions")
+
+    st.markdown("""
+- Explain Artificial Intelligence
+
+- Write a Python Stack Program
+
+- Create an HTML Login Page
+
+- Difference between SQL and MySQL
+
+- Write a Professional Resume
+
+- Explain OOP Concepts
+
+- Tell me a joke
+
+- Write a cover letter
+""")
+
+    st.markdown("---")
+
+    st.caption("Made with ❤️ using Streamlit & Gemini")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
 for message in st.session_state.messages:
+
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
 def get_ai_response(prompt):
-    model = genai.GenerativeModel("gemini-2.5-flash")
+
     response = model.generate_content(prompt)
+
     return response.text
 
-user_input = st.chat_input("Ask me anything...")
+user_input = st.chat_input("💬 Ask me anything...")
 
 if user_input:
 
@@ -97,12 +150,12 @@ if user_input:
 
     with st.chat_message("assistant"):
 
-        with st.spinner("Thinking..."):
+        with st.spinner("Aurora is thinking..."):
 
             try:
                 reply = get_ai_response(user_input)
             except Exception as e:
-                reply = f"Error:\n\n{e}"
+                reply = f"❌ Error:\n\n{e}"
 
             st.markdown(reply)
 
@@ -112,44 +165,3 @@ if user_input:
             "content": reply
         }
     )
-
-with st.sidebar:
-
-    st.image(
-        "https://cdn-icons-png.flaticon.com/512/4712/4712027.png",
-        width=90
-    )
-
-    st.title("Nova AI")
-
-    st.success("🟢 Online")
-
-    st.markdown("---")
-
-    st.markdown("### Model")
-
-    st.info("Gemini 2.5 Flash")
-
-    st.markdown("---")
-
-    if st.button("🗑 Clear Chat"):
-
-        st.session_state.messages=[]
-
-        st.rerun()
-
-    st.markdown("---")
-
-    st.markdown("### Suggestions")
-
-    st.markdown("""
-• Explain AI
-
-• Write Python Code
-
-• HTML Login Page
-
-• Resume Builder
-
-• SQL vs MySQL
-""")
