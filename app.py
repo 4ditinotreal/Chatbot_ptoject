@@ -14,7 +14,7 @@ if not GEMINI_API_KEY:
 genai.configure(api_key=GEMINI_API_KEY)
 
 st.set_page_config(
-    page_title="Nova AI",
+    page_title="Aurora AI",
     page_icon="🤖",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -61,7 +61,7 @@ width:100%;
 
 st.markdown("""
 <h1 style='text-align:center;color:#4F8BF9;'>
-🤖 Nova AI
+🤖 Aurora AI
 </h1>
 
 <p style='text-align:center;font-size:18px;color:gray;'>
